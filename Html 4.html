@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            margin: 0; height: 100vh;
+            /* ใช้รูปของคุณเป็นพื้นหลัง */
+            background: url('https://i.imgur.com/83pZ3dE.jpeg') no-repeat center center/cover;
+            display: flex; justify-content: center; align-items: center;
+            font-family: 'Inter', sans-serif;
+        }
+        #game { 
+            background: rgba(255, 255, 255, 0.7); /* พื้นหลังโปร่งแสงแบบละมุน */
+            backdrop-filter: blur(10px);
+            padding: 40px; border-radius: 20px;
+            width: 85%; max-width: 400px; text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        h2 { color: #2c5e5e; letter-spacing: 2px; font-weight: 300; }
+        #word { font-size: 3.5em; margin: 20px 0; color: #1a4d4d; }
+        input { 
+            width: 100%; padding: 12px; margin: 10px 0; border: none;
+            background: rgba(255, 255, 255, 0.8); border-bottom: 2px solid #2c5e5e;
+            text-align: center; font-size: 1.1em; outline: none;
+        }
+        button { 
+            background: #2c5e5e; color: white; border: none; padding: 12px 30px;
+            cursor: pointer; border-radius: 50px; font-weight: 400; transition: 0.3s;
+        }
+        button:hover { background: #3e8282; }
+        .stats { margin-top: 20px; font-size: 0.9em; color: #555; }
+    </style>
+</head>
+<body>
+    <div id="game">
+        <h2>WUXIA VOCAB</h2>
+        <div id="word">加载</div>
+        <input type="text" id="answer" placeholder="Meaning..." onkeydown="if(event.key==='Enter') check()">
+        <button onclick="check()">Submit</button>
+        <p id="msg"></p>
+        <div class="stats">HP: <span id="hp">3</span> | Score: <span id="score">0</span></div>
+    </div>
+
+    <script>
+        const vocab = [
+            {h: "压迫", m: ["oppression"]}, {h: "电压", m: ["voltage"]},
+            {h: "竞争", m: ["competition"]}, {h: "严格", m: ["strict"]}
+        ];
+        let cur=0, score=0, hp=3;
+        function next() {
+            cur = Math.floor(Math.random()*vocab.length);
+            document.getElementById('word').innerText = vocab[cur].h;
+        }
+        function check() {
+            let ans = document.getElementById('answer').value.toLowerCase().trim();
+            if(vocab[cur].m.some(m => ans.includes(m))) {
+                score++; document.getElementById('msg').innerText = "Correct ✨";
+            } else {
+                hp--; document.getElementById('msg').innerText = "Try again ☁️";
+            }
+            document.getElementById('score').innerText = score;
+            document.getElementById('hp').innerText = hp;
+            document.getElementById('answer').value = "";
+            if(hp <= 0) { alert("Game Over!"); score=0; hp=3; }
+            next();
+        }
+        next();
+    </script>
+</body>
+</html>
